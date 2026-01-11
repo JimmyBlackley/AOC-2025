@@ -1,52 +1,38 @@
+import math
 with open("input.txt", "r") as f:
     file_read = f.readlines()
 
 
-sum_val = 0
+    width = len(file_read[0].strip())
+    height = len(file_read) - 1
+    operator_row = height
+    operators = ['*', '+']
 
-for i in range(len(file_read[0])):
+    answer = 0
+    temp_string = ""
+
+    temp_nums = []
+
+    for i in range(width, -1, -1):
+        temp_string = ""
+        for j in range(0, height):
+            temp_char = file_read[j][i]
+            temp_char = temp_char.strip()
+            if temp_char.isnumeric():
+                temp_string += temp_char
     
-    temp_nums = [''] * (len(file_read) - 1)
-    temp_sum = 0
-    operation = ""
-    for j in range(len(file_read)):
-        char =   file_read[j][i]
-        if char == '*':
-            operation = "multiply"
-            continue
-        if char == '+':
-            operation  = "sum"
-            continue
-        
-        if char != ' ':
-            print(char)
-            temp_nums[i] += char
-
-    if ((i+1) % 5) == 0:
-
-        if operation == "multiply":
-            print(temp_nums)
-            exit()
-        
-            for k in range(len(temp_nums)):
-                temp_nums[k] = int(str(temp_nums[k]))
-        
-            temp_sum = temp_nums[0]
-            for l in range(1, (len(temp_nums))):
-                temp_sum *= temp_nums[k]
-        
-        if operation == "sum":
-            print(temp_nums)
-            exit()
-
-            for k in range(len(temp_nums)):
-                temp_nums[k] = int(str(temp_nums[k]))
-            temp_sum = sum(temp_nums)
-
-    if char != ' ':
-        temp_nums[i] += char
-    sum_val += temp_sum
- 
-    
-print(sum_val)
-
+        if temp_string != "":
+            if temp_string.isnumeric():
+                temp_nums.append(int(temp_string))
+            else:
+                print("non empty temp string:")
+                print(temp_string)
+        if str(file_read[operator_row][i]) in operators:
+            op = file_read[operator_row][i]
+            if op == '+':
+                answer += sum(temp_nums)
+                temp_nums.clear()
+            elif op == '*':
+                answer += math.prod(temp_nums)
+                temp_nums.clear()
+    print(answer)
